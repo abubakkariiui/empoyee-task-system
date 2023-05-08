@@ -65,7 +65,7 @@ export const getAllTasks = async (req, res) => {
 // Edit task by ID
 export const editTask = async (req, res) => {
     const { id } = req.params;
-    const { assignedTo, description, priority } = req.body;
+    const { assignedTo, description, priority, completed } = req.body;
 
     try {
         const task = await Task.findById(id);
@@ -87,6 +87,10 @@ export const editTask = async (req, res) => {
 
         if (priority) {
             task.priority = priority;
+        }
+
+        if (completed !== undefined) {
+            task.completed = completed;
         }
 
         await task.save();

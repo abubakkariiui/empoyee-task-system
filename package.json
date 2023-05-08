@@ -1,5 +1,5 @@
 {
-  "name": "Employee Task Management System",
+  "name": "employee_task_management_system",
   "version": "1.0.0",
   "description": "Employee Task Management System App",
   "main": "server.js",
