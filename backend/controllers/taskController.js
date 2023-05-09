@@ -61,6 +61,20 @@ export const getAllTasks = async (req, res) => {
     }
 };
 
+// Get task by ID
+export const getTaskById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const task = await Task.findById(id).populate('assignedTo', 'firstName lastName department');
+        if (!task) {
+            return res.status(404).json({ message: 'Task not found' });
+        }
+        res.json(task);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
 
 // Edit task by ID
 export const editTask = async (req, res) => {
