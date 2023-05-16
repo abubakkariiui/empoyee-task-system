@@ -46,20 +46,45 @@ export const deleteTask = async (req, res) => {
 };
 
 // Get all tasks
+// Get all tasks with offset pagination
 export const getAllTasks = async (req, res) => {
     try {
-        const tasks = await Task.find().populate('assignedTo', 'firstName lastName department');
-        const modifiedTasks = tasks.map(task => {
+        const { offset = 0, limit = 10 } = req.query;
+
+        const total = await Task.countDocuments();
+
+        const tasks = await Task.find().populate('assignedTo', 'firstName lastName department')
+            .sort({ createdAt: -1 }) // Sort tasks by creation date, descending order
+            .skip(parseInt(offset)) // Skip the specified number of tasks
+            .limit(parseInt(limit)) // Limit the number of tasks returned
+
+        const modifiedTasks = tasks.map((task) => {
             if (!task.assignedTo) {
                 task.assignedTo = "Unassigned";
             }
             return task;
         });
-        res.json(modifiedTasks);
+
+        res.json({ tasks: modifiedTasks, total });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
+
+// export const getAllTasks = async (req, res) => {
+//     try {
+//         const tasks = await Task.find().populate('assignedTo', 'firstName lastName department');
+//         const modifiedTasks = tasks.map(task => {
+//             if (!task.assignedTo) {
+//                 task.assignedTo = "Unassigned";
+//             }
+//             return task;
+//         });
+//         res.json(modifiedTasks);
+//     } catch (err) {
+//         res.status(500).json({ error: err.message });
+//     }
+// };
 
 // Get task by ID
 export const getTaskById = async (req, res) => {
