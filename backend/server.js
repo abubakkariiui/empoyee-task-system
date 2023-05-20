@@ -4,6 +4,7 @@ import connectDB from "./config/db.js";
 import cors from 'cors'
 import employeeRoutes from "./routes/employeeRoutes.js";
 import taskRoutes from "./routes/taskRoutes.js";
+import path from "path";
 
 dotenv.config();
 
